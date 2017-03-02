@@ -1,0 +1,4 @@
+Manifest-Version: 1.0.0
+Created-By: HY.ZhengWei@qq.com  2015-01
+Specification-Version: 1.0.0  2015-01-09
+SourceCode: https://github.com/HY-ZhengWei/hy.common.berkeley
