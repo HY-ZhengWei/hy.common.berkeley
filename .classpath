@@ -9,6 +9,6 @@
 	<classpathentry kind="lib" path="lib/json-smart-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="lib/xjava.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/XJava"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
