@@ -1,4 +1,4 @@
-package junit.org.hy.common.berkeley.junit;
+package org.hy.common.berkeley.junit;
 
 import org.hy.common.Date;
 import org.hy.common.Help;

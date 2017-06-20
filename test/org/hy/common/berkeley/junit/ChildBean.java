@@ -1,4 +1,4 @@
-package junit.org.hy.common.berkeley.junit;
+package org.hy.common.berkeley.junit;
 
 import java.io.Serializable;
 
