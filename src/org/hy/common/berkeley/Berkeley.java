@@ -38,6 +38,9 @@ import com.sleepycat.je.OperationStatus;
  *                                添加：获取所有对象记录的方法
  *                                添加：提交数据的方法
  *                                添加：删除所有记录的方法
+ *              v3.0  2017-06-20  修复：游标用完后，及时关闭释放的功能
+ *                                修复：删除记录后，及时清除日志释放磁盘空间的功能
+ *                                修复：可序列化对象的数据库跟随本类this.close() 而关闭
  */
 public class Berkeley
 {
@@ -138,6 +141,57 @@ public class Berkeley
     
     
     /**
+     * 清除日志，释放空间
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2017-06-20
+     * @version     v1.0
+     *
+     */
+    public void cleanLog()
+    {
+        try
+        {
+            if ( this.environment != null )
+            {
+                this.environment.cleanLog();
+            }
+        }
+        catch (Exception exce)
+        {
+            exce.printStackTrace();
+        }
+    }
+    
+    
+    
+    /**
+     * 关闭游标
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2017-06-20
+     * @version     v1.0
+     *
+     * @param i_Cursor
+     */
+    public static void closeCursor(Cursor i_Cursor)
+    {
+        if ( i_Cursor != null )
+        {
+            try
+            {
+                i_Cursor.close();
+            }
+            catch (Exception exce)
+            {
+                exce.printStackTrace();
+            }
+        }
+    }
+    
+    
+    
+    /**
      * 1. 通过调用Database.close()方法来关闭数据库，但要注意，在关闭数据库前必须得先把游标先关闭
      * 
      * 2. 可以通过Environment.close()这个方法来关闭数据库环境。
@@ -148,6 +202,11 @@ public class Berkeley
         if ( this.environment != null )
         {
             this.commit();
+        }
+        
+        if ( this.classBerkeley != null )
+        {
+            this.classBerkeley.close();
         }
         
         try
@@ -163,6 +222,8 @@ public class Berkeley
         {
             exce.printStackTrace();
         }
+
+        this.cleanLog();
         
         try
         {
@@ -563,6 +624,10 @@ public class Berkeley
         {
             exce.printStackTrace();
         }
+        finally
+        {
+            closeCursor(v_Cursor);
+        }
         
         return v_Ret;
     }
@@ -642,6 +707,10 @@ public class Berkeley
         {
             exce.printStackTrace();
         }
+        finally
+        {
+            closeCursor(v_Cursor);
+        }
         
         return v_Ret;
     }
@@ -671,6 +740,8 @@ public class Berkeley
                 {
                     this.commit();
                 }
+                
+                this.cleanLog();
                 
                 return true;
             }
@@ -709,6 +780,7 @@ public class Berkeley
             }
             
             this.environment.sync();
+            this.cleanLog();
         }
     }
     
@@ -726,7 +798,11 @@ public class Berkeley
     {
         if ( this.getCount() > 0 )
         {
-            return this.environment.truncateDatabase(null ,this.database.getDatabaseName() ,true);
+            long v_Ret = this.environment.truncateDatabase(null ,this.database.getDatabaseName() ,true);
+            
+            this.cleanLog();
+            
+            return v_Ret;
         }
         else
         {
@@ -936,7 +1012,6 @@ public class Berkeley
     protected void finalize()
     {
         this.close();
-        this.classBerkeley.getCatalogDB().close();
     }
     
 }

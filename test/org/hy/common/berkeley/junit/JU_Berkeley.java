@@ -31,9 +31,17 @@ import com.sleepycat.je.EnvironmentConfig;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
 public class JU_Berkeley
 {
+    private static boolean $IsInit = false;
+    
+    
     
     public JU_Berkeley() throws Exception
     {
+        if ( !$IsInit )
+        {
+            $IsInit = true;
+            XJava.parserAnnotation("org.hy.common.berkeley");
+        }
     }
     
     
@@ -125,11 +133,8 @@ public class JU_Berkeley
      *
      * @throws Exception
      */
-    @Test
     public void test_002() throws Exception
     {
-        XJava.parserAnnotation("org.hy.common.berkeley");
-        
         Berkeley v_Berkeley  = (Berkeley)XJava.getObject("Berkeley");
         XJSON    v_XJSON     = new XJSON();
         Date     v_BeginTime = new Date();
@@ -162,6 +167,26 @@ public class JU_Berkeley
         System.out.println("       Count = " + v_Berkeley.getCount());
         System.out.println("Object Count = " + v_Berkeley.getObjectCount());
         System.out.println();
+        
+        
+        // 当你完成数据库操作后一定要关闭数据库环境
+        // v_Berkeley.close();
+    }
+    
+    
+    
+    @Test
+    public void test_003() throws Exception
+    {
+        for (int i=0; i<=10; i++)
+        {
+            this.test_002();
+        }
+        
+        
+        Berkeley v_Berkeley = (Berkeley)XJava.getObject("Berkeley");
+        // 当你完成数据库操作后一定要关闭数据库环境
+        v_Berkeley.close();
     }
     
 }

@@ -26,6 +26,7 @@ import com.sleepycat.je.OperationStatus;
  * @createDate  2015-01-09
  * @version     v1.0
  *              v2.0  2016-02-17  添加：获取所有对象记录的方法
+ *              v3.0  2017-06-20  修复：游标用完后，及时关闭释放的功能
  */
 public class ClassBerkeley
 {
@@ -322,6 +323,10 @@ public class ClassBerkeley
         {
             exce.printStackTrace();
         }
+        finally
+        {
+            Berkeley.closeCursor(v_Cursor);
+        }
         
         return v_Ret;
     }
@@ -368,6 +373,39 @@ public class ClassBerkeley
         else
         {
             return 0;
+        }
+    }
+    
+    
+    
+    /**
+     * 关闭
+     * 
+     * 1. 不能在此关闭运行环境，environment.close() 。因为 this.dataDB 也在用同一份运行环境
+     * 2. 不能在此直接简单的调用 this.catalogDB.close() 。因为会关闭运行环境。 
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2017-06-20
+     * @version     v1.0
+     *
+     */
+    public void close()
+    {
+        if ( this.catalogDB != null )
+        {
+            try
+            {
+                if ( this.catalogDB.getDatabase() != null )
+                {
+                    this.catalogDB.getDatabase().close();
+                }
+                
+                this.catalogDB.setDatabase(null);
+            }
+            catch (Exception exce)
+            {
+                exce.printStackTrace();
+            }
         }
     }
     
