@@ -33,6 +33,8 @@ public class JU_Berkeley
 {
     private static boolean $IsInit = false;
     
+    private static String  $BigData = "";
+    
     
     
     public JU_Berkeley() throws Exception
@@ -41,12 +43,14 @@ public class JU_Berkeley
         {
             $IsInit = true;
             XJava.parserAnnotation("org.hy.common.berkeley");
+            
+            $BigData = StringHelp.rpad("" ,10000/50 ,"ABCDEFG HIGKLMN OPQRST UVWXYZ 1234567890!@#$%^&*()");
         }
     }
     
     
     
-    public static void main(String [] args) throws Exception
+    public static void main_Stop(String [] args) throws Exception
     {
         EnvironmentConfig v_EnvConfig = new EnvironmentConfig();
         DatabaseConfig    v_DBConfig  = new DatabaseConfig();
@@ -175,7 +179,6 @@ public class JU_Berkeley
     
     
     
-    @Test
     public void test_003() throws Exception
     {
         for (int i=0; i<=10; i++)
@@ -189,4 +192,49 @@ public class JU_Berkeley
         v_Berkeley.close();
     }
     
+    
+    
+    /**
+     * 大数据写入测试
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2018-03-21
+     * @version     v1.0
+     *
+     * @throws Exception
+     */
+    @Test
+    public void test_004_BigData() throws Exception
+    {
+        Berkeley v_Berkeley = (Berkeley)XJava.getObject("Berkeley");
+        
+        int  v_DataSize  = 1000;
+        Date v_BeginTime = new Date();
+        System.out.println("-- " + v_BeginTime.getFullMilli() + "  开始.. ...");
+        
+        for (int i=0; i<=v_DataSize; i++)
+        {
+            String v_Key = StringHelp.getUUID();
+            
+            v_Berkeley.put(v_Key ,$BigData + v_Key);
+            v_Berkeley.delete(v_Key);
+        }
+        
+        Date v_EndTime = new Date();
+        long v_TimeLen = v_EndTime.getTime() - v_BeginTime.getTime();
+        System.out.println("-- " + v_EndTime.getFullMilli() + "  完成... ...");
+        System.out.println("-- 写入用时：" + Date.toTimeLen(v_TimeLen));
+        System.out.println("-- 平均用时：" + Help.division(v_TimeLen ,v_DataSize));
+        
+        // 当你完成数据库操作后一定要关闭数据库环境
+        v_Berkeley.close();
+    }
+    
+    
+    
+    public static void main(String [] args) throws Exception
+    {
+        JU_Berkeley v_JU_Berkeley = new JU_Berkeley();
+        v_JU_Berkeley.test_004_BigData();
+    }
 }

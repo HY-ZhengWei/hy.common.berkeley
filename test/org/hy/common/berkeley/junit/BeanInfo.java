@@ -17,7 +17,11 @@ public class BeanInfo implements Serializable
     private String name;
     
     private Date   createTime;
+    
+    /** 大数据信息 */
+    private String bigInfo;
 
+    
     
     /**
      * 获取：
@@ -56,6 +60,26 @@ public class BeanInfo implements Serializable
     public void setCreateTime(Date createTime)
     {
         this.createTime = createTime;
+    }
+
+    
+    /**
+     * 获取：大数据信息
+     */
+    public String getBigInfo()
+    {
+        return bigInfo;
+    }
+
+    
+    /**
+     * 设置：大数据信息
+     * 
+     * @param bigInfo 
+     */
+    public void setBigInfo(String bigInfo)
+    {
+        this.bigInfo = bigInfo;
     }
     
 }
