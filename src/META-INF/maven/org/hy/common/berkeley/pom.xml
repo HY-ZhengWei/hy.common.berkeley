@@ -35,7 +35,7 @@
 	<dependency>
 	    <groupId>org</groupId>
 	    <artifactId>hy.common.xjava</artifactId>
-	    <version>3.9.24</version>
+	    <version>3.9.28</version>
 	</dependency>
 	
 	<!-- Not find 6.4.25 version for http://mvnrepository.com
