@@ -4,7 +4,7 @@
 
   <groupId>org</groupId>
   <artifactId>hy.common.berkeley</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <packaging>jar</packaging>
 
   <name>hy.common.berkeley</name>
@@ -31,20 +31,19 @@
       <scope>test</scope>
     </dependency>
     
-	<!-- https://github.com/HY-ZhengWei/XJava -->
-	<dependency>
-	    <groupId>org</groupId>
-	    <artifactId>hy.common.xjava</artifactId>
-	    <version>3.9.28</version>
-	</dependency>
-	
-	<!-- Not find 6.4.25 version for http://mvnrepository.com
-	<dependency>
-	    <groupId>com.sleepycat</groupId>
-	    <artifactId>je</artifactId>
-	    <version>6.4.25</version>
-	</dependency>
-	-->
-	
+    <!-- https://github.com/HY-ZhengWei/XJava -->
+    <dependency>
+        <groupId>org</groupId>
+        <artifactId>hy.common.xjava</artifactId>
+        <version>4.0.8</version>
+    </dependency>
+    
+    <!-- http://mvnrepository.com -->
+    <dependency>
+        <groupId>com.sleepycat</groupId>
+        <artifactId>je</artifactId>
+        <version>18.3.12</version>
+    </dependency>
+    
   </dependencies>
 </project>

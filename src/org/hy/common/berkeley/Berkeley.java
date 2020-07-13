@@ -41,6 +41,7 @@ import com.sleepycat.je.OperationStatus;
  *              v3.0  2017-06-20  修复：游标用完后，及时关闭释放的功能
  *                                修复：删除记录后，及时清除日志释放磁盘空间的功能
  *                                修复：可序列化对象的数据库跟随本类this.close() 而关闭
+ *              V3.1  2020-07-013 添加：自动创建Berkeley数据文件的保存目录
  */
 public class Berkeley
 {
@@ -126,6 +127,12 @@ public class Berkeley
     {
         try
         {
+            File v_envDir = new File(this.environmentHome);
+            if ( !v_envDir.exists() )
+            {
+                v_envDir.mkdirs();
+            }
+            
             this.environment   = new Environment(new File(this.environmentHome) ,this.environmentConfig);
             
             this.database      = this.environment.openDatabase(null ,this.databaseName ,this.databaseConfig);
