@@ -78,6 +78,7 @@ public class JU_Berkeley
     /**
      * 简单的读写测试
      */
+    @Test
     public void test_001() throws Exception
     {
         XJava.parserAnnotation("org.hy.common.berkeley");
@@ -137,6 +138,7 @@ public class JU_Berkeley
      *
      * @throws Exception
      */
+    @Test
     public void test_002() throws Exception
     {
         Berkeley v_Berkeley  = (Berkeley)XJava.getObject("Berkeley");
