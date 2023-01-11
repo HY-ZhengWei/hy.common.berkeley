@@ -1,6 +1,6 @@
-Manifest-Version: 1.0.4
+Manifest-Version: 1.0.5
 Created-By: HY.ZhengWei@qq.com  2015-01
-Specification-Version: 1.0.4  2022-11-07
+Specification-Version: 1.0.5  2023-01-11
 SourceCode: https://github.com/HY-ZhengWei/hy.common.berkeley
 SourceCodeChina: https://gitee.com/HY-ZhengWei/hy.common.berkeley
 Build-JDK: 1.6

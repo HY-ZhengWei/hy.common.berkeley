@@ -6,7 +6,7 @@
 
     <groupId>cn.openapis</groupId>
     <artifactId>hy.common.berkeley</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
 
     <name>cn.openapis.hy.common.berkeley</name>
@@ -54,14 +54,14 @@
         <dependency>
             <groupId>cn.openapis</groupId>
             <artifactId>hy.common.base</artifactId>
-            <version>1.0.162</version>
+            <version>1.0.164</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>cn.openapis</groupId>
             <artifactId>hy.common.file</artifactId>
-            <version>1.2.2</version>
+            <version>1.2.3</version>
             <scope>provided</scope>
         </dependency>
         
@@ -80,7 +80,7 @@
     </dependencies>
 
     <scm>
-        <tag>main</tag>
+        <tag>master</tag>
         <url>git@github.com:HY-ZhengWei/hy.common.berkeley.git</url>
         <connection>git@github.com:HY-ZhengWei/hy.common.berkeley.git</connection>
         <developerConnection>git@github.com:HY-ZhengWei/hy.common.berkeley.git</developerConnection>
@@ -90,7 +90,13 @@
         <resources>
             <resource>
                 <directory>src/main/java</directory>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.html</include>
+                    <include>**/*.txt</include>
+                    <include>**/*.ini</include>
+                </includes>
             </resource>
 
             <resource>
