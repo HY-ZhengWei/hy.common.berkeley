@@ -27,3 +27,5 @@ copy hy.common.berkeley-sources.jar ..\..\..
 del /Q hy.common.berkeley-sources.jar
 rd /s/q META-INF
 cd ..\..\..
+
+pause
