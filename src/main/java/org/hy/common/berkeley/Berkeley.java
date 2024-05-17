@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hy.common.Help;
+import org.hy.common.xml.log.Logger;
 
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.Database;
@@ -46,7 +47,11 @@ import com.sleepycat.je.OperationStatus;
 public class Berkeley
 {
     
-    /** 
+    private static final Logger $Logger = new Logger(Berkeley.class);
+    
+    
+    
+    /**
      * 数据库环境配置
      * 
      * 1. setAllowCreate()     如果设置了true则表示当数据库环境不存在时候重新创建一个数据库环境，默认为false.
@@ -56,9 +61,9 @@ public class Berkeley
      * 
      * 其父类的方法
      * 1. setCachePercent()    设置当前环境能够使用的RAM占整个JVM内存的百分比。
-     * 2. setCacheSize()       设置当前环境能够使用的最大RAM。单位BYTE 
+     * 2. setCacheSize()       设置当前环境能够使用的最大RAM。单位BYTE
      * 3. setTxnNoSync()       当提交事务的时候是否把缓存中的内容同步到磁盘中去。true 表示不同步，也就是说不写磁盘
-     * 4. setTxnWriteNoSync()  当提交事务的时候，是否把缓冲的log写到磁盘上。true 表示不同步，也就是说不写磁盘  
+     * 4. setTxnWriteNoSync()  当提交事务的时候，是否把缓冲的log写到磁盘上。true 表示不同步，也就是说不写磁盘
      */
     private EnvironmentConfig          environmentConfig;
     
@@ -70,11 +75,11 @@ public class Berkeley
     
     
     
-    /** 
+    /**
      * 数据库配置
      * 
      * 1. setAllowCreate()          如果是true的话，则当不存在此数据库的时候创建一个。
-     * 2. setBtreeComparator()      设置用于Btree比较的比较器，通常是用来排序 
+     * 2. setBtreeComparator()      设置用于Btree比较的比较器，通常是用来排序
      * 3. setDuplicateComparator()  设置用来比较一个key有两个不同值的时候的大小比较器。
      * 4. setSortedDuplicates()     设置一个key是否允许存储多个值，true代表允许，默认false.
      * 5. setExclusiveCreate()      以独占的方式打开，也就是说同一个时间只能有一实例打开这个database。
@@ -90,7 +95,7 @@ public class Berkeley
     /** 数据库的实例对象 */
     private Database                   database;
     
-    /** 
+    /**
      * 可序列化对象的专有数据库
      */
     private ClassBerkeley              classBerkeley;
@@ -100,7 +105,7 @@ public class Berkeley
     /** 数据库格式。默认为: UTF-8 */
     private String                     dataEnCode;
     
-    /** 
+    /**
      * 是否自动提交。默认为：ture自动提交
      * 
      *  进行了写操作的时候，你的修改不一定马上就能生效，有的时候他仅仅是缓存在RAM中，
@@ -141,7 +146,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
     }
     
@@ -166,7 +171,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
     }
     
@@ -191,7 +196,7 @@ public class Berkeley
             }
             catch (Exception exce)
             {
-                exce.printStackTrace();
+                $Logger.error(exce);
             }
         }
     }
@@ -227,7 +232,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
 
         this.cleanLog();
@@ -243,7 +248,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
     }
     
@@ -294,7 +299,7 @@ public class Berkeley
      */
     public DatabaseEntry toDBEntry(String i_String) throws UnsupportedEncodingException
     {
-        return new DatabaseEntry(i_String.getBytes(this.dataEnCode)); 
+        return new DatabaseEntry(i_String.getBytes(this.dataEnCode));
     }
     
     
@@ -321,7 +326,7 @@ public class Berkeley
      * 则使用此方法将使用新的值覆盖旧的值。
      *
      * @param i_Key
-     * @param i_Value
+     * @param i_ObjValue
      * @return
      */
     public <T extends Serializable> boolean put(String i_Key ,T i_ObjValue)
@@ -339,7 +344,7 @@ public class Berkeley
      * 只要存在该key就不允许添加，并且返回OperationStatus.KEYEXIST信息。
      *
      * @param i_Key
-     * @param i_Value
+     * @param i_ObjValue
      * @return
      */
     public <T extends Serializable> boolean putNoOverwrite(String i_Key ,T i_ObjValue)
@@ -357,7 +362,7 @@ public class Berkeley
      * 只要存在该key就不允许添加，并且返回OperationStatus.KEYEXIST信息。
      *
      * @param i_Key
-     * @param i_Value
+     * @param i_ObjValue
      * @return
      */
     public <T extends Serializable> boolean putNoDupData(String i_Key ,T i_ObjValue)
@@ -385,7 +390,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
         
         return false;
@@ -412,7 +417,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
         
         return false;
@@ -439,7 +444,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
         
         return false;
@@ -519,7 +524,7 @@ public class Berkeley
      * 
      * 如果原先已经有了该key，则不覆盖。
      * 不管database是否允许支持多重记录(一个key对应多个value),
-     * 只要存在该key就不允许添加，并且返回OperationStatus.KEYEXIST信息。  
+     * 只要存在该key就不允许添加，并且返回OperationStatus.KEYEXIST信息。
      *
      * @param i_Key
      * @param i_Value
@@ -593,7 +598,7 @@ public class Berkeley
             }
             catch (Exception exce)
             {
-                exce.printStackTrace();
+                $Logger.error(exce);
             }
         }
         
@@ -615,7 +620,7 @@ public class Berkeley
     {
         Map<String ,String> v_Ret    = new HashMap<String ,String>();
         Cursor              v_Cursor = null;
-        DatabaseEntry       v_Key    = new DatabaseEntry();  
+        DatabaseEntry       v_Key    = new DatabaseEntry();
         DatabaseEntry       v_Value  = new DatabaseEntry();
         
         try
@@ -629,7 +634,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
         finally
         {
@@ -656,14 +661,14 @@ public class Berkeley
         {
             v_OperationStatus = this.database.get(null ,this.toDBEntry(i_Key) ,v_Value ,LockMode.DEFAULT);
             
-            if ( v_OperationStatus != null && v_OperationStatus == OperationStatus.SUCCESS )
+            if ( v_OperationStatus == OperationStatus.SUCCESS )
             {
                 return v_Value;
             }
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
         
         return null;
@@ -682,7 +687,7 @@ public class Berkeley
         DatabaseEntry   v_Value           = new DatabaseEntry();
         OperationStatus v_OperationStatus = this.database.get(null ,i_Key ,v_Value ,LockMode.DEFAULT);
         
-        if ( v_OperationStatus != null && v_OperationStatus == OperationStatus.SUCCESS )
+        if ( v_OperationStatus == OperationStatus.SUCCESS )
         {
             return v_Value;
         }
@@ -698,7 +703,7 @@ public class Berkeley
     {
         Map<String ,DatabaseEntry> v_Ret    = new HashMap<String ,DatabaseEntry>();
         Cursor                     v_Cursor = null;
-        DatabaseEntry              v_Key    = new DatabaseEntry();  
+        DatabaseEntry              v_Key    = new DatabaseEntry();
         DatabaseEntry              v_Value  = new DatabaseEntry();
         
         try
@@ -712,7 +717,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
         finally
         {
@@ -759,7 +764,7 @@ public class Berkeley
         }
         catch (Exception exce)
         {
-            exce.printStackTrace();
+            $Logger.error(exce);
         }
         
         return false;
@@ -847,7 +852,7 @@ public class Berkeley
     /**
      * 设置：数据库环境配置
      * 
-     * @param environmentConfig 
+     * @param environmentConfig
      */
     public void setEnvironmentConfig(EnvironmentConfig environmentConfig)
     {
@@ -869,7 +874,7 @@ public class Berkeley
     /**
      * 设置：数据库环境的路径
      * 
-     * @param environmentHome 
+     * @param environmentHome
      */
     public void setEnvironmentHome(String environmentHome)
     {
@@ -891,7 +896,7 @@ public class Berkeley
     /**
      * 设置：数据库环境的实例对象
      * 
-     * @param environment 
+     * @param environment
      */
     public void setEnvironment(Environment environment)
     {
@@ -913,7 +918,7 @@ public class Berkeley
     /**
      * 设置：数据库配置
      * 
-     * @param databaseConfig 
+     * @param databaseConfig
      */
     public void setDatabaseConfig(DatabaseConfig databaseConfig)
     {
@@ -935,7 +940,7 @@ public class Berkeley
     /**
      * 设置：数据库名称
      * 
-     * @param databaseName 
+     * @param databaseName
      */
     public void setDatabaseName(String databaseName)
     {
@@ -957,7 +962,7 @@ public class Berkeley
     /**
      * 设置：数据库的实例对象
      * 
-     * @param database 
+     * @param database
      */
     public void setDatabase(Database database)
     {
@@ -979,7 +984,7 @@ public class Berkeley
     /**
      * 设置：数据库格式。默认为: UTF-8
      * 
-     * @param dataEnCode 
+     * @param dataEnCode
      */
     public void setDataEnCode(String dataEnCode)
     {
@@ -1007,7 +1012,7 @@ public class Berkeley
      *  进行了写操作的时候，你的修改不一定马上就能生效，有的时候他仅仅是缓存在RAM中，
      *  如果想让你的修改立即生效，则可以使用Environment.sync()方法来把数据同步到磁盘中去
      * 
-     * @param autoCommit 
+     * @param autoCommit
      */
     public void setAutoCommit(boolean autoCommit)
     {
@@ -1016,6 +1021,7 @@ public class Berkeley
 
 
 
+    @Override
     protected void finalize()
     {
         this.close();
